@@ -26,6 +26,21 @@ def twopoint_stars(sim):
 				distances.append(np.linalg.norm(sim.s[i]['pos']-sim.s[j]['pos']))
 	return np.array(distances)
 
+#Spatial Derivative of the standard M4 Kernel
+def dM4(x):
+	if x <= 1:
+		return 1.0/(4.0*np.pi)*(12.0*x+9.0*x**2)
+	if x < 1 and x >= 2:
+		return 1.0/(4.0*np.pi)*(3.0*(2-x)**2)
+	else:
+		return 0
+	
+def massflux_cartesian(sim, axis, axis_value):
+	flux = 0
+	for i in sim.gas:
+		flux += i['mass']*i['v'+axis]*dM4(np.abs(i[axis]-axis_value)/i['h'])
+	return flux
+
 def point_plot(sim, qty='rho'):
     plt.xlim((np.min(sim['x']), np.max(sim['x'])))
     plt.ylim((np.min(sim['y']), np.max(sim['y'])))
