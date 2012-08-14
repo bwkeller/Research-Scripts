@@ -1,0 +1,66 @@
+#!/usr/bin/python
+
+from optparse import OptionParser
+from progressbar import ProgressBar, Percentage, Bar
+import numpy as np
+import pynbody as pyn
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+try:
+    from IPython import embed
+except:
+    from IPython.Shell import IPShellEmbed 
+from sys import argv
+from os.path import exists
+import pynbody.analysis.angmom as angmom
+import pynbody.plot.sph as p_sph
+filename = ""
+
+def twopoint_stars(sim):
+	distances = []
+	print "Simulation contains %d Stars" % len(sim.s)
+	progress = ProgressBar(widgets=["Computing 2point correlation function:", Percentage(), Bar()])
+	for i in progress(range(len(sim.s))):
+		for j in range(len(sim.s)):
+			if i != j:
+				distances.append(np.linalg.norm(sim.s[i]['pos']-sim.s[j]['pos']))
+	return np.array(distances)
+
+def point_plot(sim, qty='rho'):
+    plt.xlim((np.min(sim['x']), np.max(sim['x'])))
+    plt.ylim((np.min(sim['y']), np.max(sim['y'])))
+    plt.scatter(sim['x'], sim['y'], c=sim[qty], s=1, marker=',', 
+    edgecolor='none')
+    cbar = plt.colorbar()
+    cbar.set_label(qty)
+
+def scaleheight(sim, axis='z'):
+	return np.inner(sim['mass'], np.abs(sim[axis]))/np.sum(sim['mass'])
+
+def point_plot_3d(sim, qty='rho'):
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(sim['x'], sim['y'], sim['z'], c=sim[qty], s=2, marker=',', 
+    edgecolor='none')
+
+@pyn.snapshot.SimSnap.derived_quantity
+def dt(sim):
+   return np.array([float(i) for i in open(filename).readlines()[1:]])
+
+if __name__ == "__main__":
+    parser = OptionParser()
+    parser.add_option("-c", "--code-units", action="store_true", dest="cunits",
+    help="Keep sim in code units")
+    (opts, args) = parser.parse_args()
+    plt.ion()
+    sim = pyn.load(args[0])
+    if exists(args[0]+".dt"):
+        filename = args[0]+".dt"
+        sim['dt']
+    if(not opts.cunits):
+        sim.physical_units()
+    try:
+        embed()
+    except:
+        ipshell = IPShellEmbed() 
+        ipshell()
