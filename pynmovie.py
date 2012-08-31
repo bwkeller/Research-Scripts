@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
+import sys
 import pynbody
 import envoy
 from optparse import OptionParser
@@ -22,7 +23,8 @@ if __name__ == "__main__":
 	except AttributeError:
 		(vmin, vmax) = (None, None)
 	if opts.script != None:
-		scriptfile = __import__(opts.script)
+		sys.path.append('.')
+		scriptfile = __import__(opts.script.split('.')[0])
 	for i in args:
 		sim = pynbody.load(i)
 		if opts.script != None:
