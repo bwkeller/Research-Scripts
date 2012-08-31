@@ -28,9 +28,8 @@ if __name__ == "__main__":
 		sys.path.append('.')
 		scriptfile = __import__(opts.script.split('.')[0])
 	for i in args:
-		sim = pynbody.load(i)
 		if opts.script != None:
-			scriptfile.process(sim, i)
+			scriptfile.process(i)
 		else:
 			ptypes = {"gas":sim.gas, "dm":sim.dm, "stars":sim.stars}
 			p_sph.image(ptypes[opts.ptype], cmap="hot", units="Msol kpc^-2", vmin=vmin, vmax=vmax)
