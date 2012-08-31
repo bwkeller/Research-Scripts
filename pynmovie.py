@@ -32,7 +32,7 @@ if __name__ == "__main__":
 			scriptfile.process(i)
 		else:
 			ptypes = {"gas":sim.gas, "dm":sim.dm, "stars":sim.stars}
-			p_sph.image(ptypes[opts.ptype], cmap="hot", units="Msol kpc^-2", vmin=vmin, vmax=vmax)
+			p_sph.image(ptypes[opts.ptype], cmap="jet", vmin=vmin, vmax=vmax)
 		plt.savefig("%09d.png" % (imgcount))
 		imgcount += 1
 	vid = envoy.run('ffmpeg  -b 1800 -r 5 -i %09d.png '+fname)
