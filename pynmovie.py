@@ -11,9 +11,11 @@ if __name__ == "__main__":
 	parser = OptionParser()
 	parser.add_option("-r", "--range", action="store", dest="valrange", 
 	help="The range of values to plot (in the format 'min max')")
+	parser.add_option("-f", "--fps", action="store", dest="fps", 
+	help="Frame Rate", default=5)
 	parser.add_option("-t", "--type", action="store", dest="ptype", 
 	help="Type of particles to show (gas, dm, or star)", default="gas")
-	parser.add_option("-e", "--type", action="store", dest="script", 
+	parser.add_option("-e", action="store", dest="script", 
 	help="preprocessing script to run on each simulation.")
 	(opts, args) = parser.parse_args()
 	imgcount = 0
