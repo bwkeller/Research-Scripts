@@ -52,6 +52,11 @@ def point_plot(sim, qty='rho'):
 def scaleheight(sim, axis='z'):
 	return np.inner(sim['mass'], np.abs(sim[axis]))/np.sum(sim['mass'])
 
+def phase(sim):
+	plt.loglog(sim.g['rho'], sim.g['temp'], 'r.', ms=1, mec='r')
+	plt.xlabel('Density (%s)' % str(sim.g['rho'].units))
+	plt.ylabel('Temperature (%s)' % str(sim.g['temp'].units))
+
 def point_plot_3d(sim, qty='rho'):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
