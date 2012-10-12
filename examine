@@ -16,6 +16,32 @@ import pynbody.analysis.angmom as angmom
 import pynbody.plot.sph as p_sph
 filename = ""
 
+class pointplt():
+	def __init__(self, sim):
+		self.sim = sim
+		self.point_size = 20
+		self.color = 'k'
+		self.range_x = (np.min(self.sim['x']), np.max(self.sim['x']))
+		self.range_y = (np.min(self.sim['y']), np.max(self.sim['y']))
+		self.plot()
+	def cmap(self, qty, vmin=None, vmax=None):
+		if vmin ==  None:
+			vmin = np.min(self.sim[qty])
+		if vmax ==  None:
+			vmax = np.max(self.sim[qty])
+		self.color = self.sim[qty]
+		self.plot()
+	def plot(self):
+		plt.scatter(self.sim['x'], self.sim['y'], marker='.', c=self.color, s=self.point_size, edgecolors='none')
+		plt.xlim(self.range_x)
+		plt.ylim(self.range_y)
+		plt.xlabel(self.sim['x'].units)
+		plt.ylabel(self.sim['y'].units)
+
+
+def points(sim):
+	return pointplt(sim)
+
 def twopoint_stars(sim):
 	distances = []
 	print "Simulation contains %d Stars" % len(sim.s)
@@ -40,14 +66,6 @@ def massflux_cartesian(sim, axis, axis_value):
 	x = np.abs(sim.g[axis] - axis_value)/sim.g['smooth']
 	n = sim.g['smooth']/x*(sim.g[axis]-axis_value)
 	return np.sum([n[i]*sim.g[i]['mass']*sim.g[i]['v'+axis]*dM4(x[i])/sim.g[i]['smooth']  for i in np.where(x < 2)[0]])
-
-def point_plot(sim, qty='rho'):
-    plt.xlim((np.min(sim['x']), np.max(sim['x'])))
-    plt.ylim((np.min(sim['y']), np.max(sim['y'])))
-    plt.scatter(sim['x'], sim['y'], c=sim[qty], s=1, marker=',', 
-    edgecolor='none')
-    cbar = plt.colorbar()
-    cbar.set_label(qty)
 
 def scaleheight(sim, axis='z'):
 	return np.inner(sim['mass'], np.abs(sim[axis]))/np.sum(sim['mass'])
