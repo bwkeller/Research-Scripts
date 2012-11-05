@@ -7,9 +7,9 @@ import pynbody as pyn
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 try:
-    from IPython import embed
+	from IPython import embed
 except:
-    from IPython.Shell import IPShellEmbed 
+	from IPython.Shell import IPShellEmbed 
 from sys import argv
 from os.path import exists
 import pynbody.analysis.angmom as angmom
@@ -25,9 +25,9 @@ class pointplt():
 		self.range_y = (np.min(self.sim['y']), np.max(self.sim['y']))
 		self.plot()
 	def cmap(self, qty, vmin=None, vmax=None):
-		if vmin ==  None:
+		if vmin ==	None:
 			vmin = np.min(self.sim[qty])
-		if vmax ==  None:
+		if vmax ==	None:
 			vmax = np.max(self.sim[qty])
 		self.color = self.sim[qty]
 		self.plot()
@@ -76,29 +76,30 @@ def phase(sim):
 	plt.ylabel('Temperature (%s)' % str(sim.g['temp'].units))
 
 def point_plot_3d(sim, qty='rho'):
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(sim['x'], sim['y'], sim['z'], c=sim[qty], s=2, marker=',', 
-    edgecolor='none')
+	fig = plt.figure()
+	ax = fig.add_subplot(111, projection='3d')
+	ax.scatter(sim['x'], sim['y'], sim['z'], c=sim[qty], s=2, marker=',', 
+	edgecolor='none')
 
 @pyn.snapshot.SimSnap.derived_quantity
 def dt(sim):
    return np.array([float(i) for i in open(filename).readlines()[1:]])
 
 if __name__ == "__main__":
-    parser = OptionParser()
-    parser.add_option("-c", "--code-units", action="store_true", dest="cunits",
-    help="Keep sim in code units")
-    (opts, args) = parser.parse_args()
-    plt.ion()
-    sim = pyn.load(args[0])
-    if exists(args[0]+".dt"):
-        filename = args[0]+".dt"
-        sim['dt']
-    if(not opts.cunits):
-        sim.physical_units()
-    try:
-        embed()
-    except:
-        ipshell = IPShellEmbed() 
-        ipshell()
+	parser = OptionParser()
+	parser.add_option("-c", "--code-units", action="store_true", dest="cunits",
+	help="Keep sim in code units")
+	(opts, args) = parser.parse_args()
+	plt.ion()
+	sim = pyn.load(args[0])
+	if exists(args[0]+".dt"):
+		filename = args[0]+".dt"
+		sim['dt']
+	if(not opts.cunits):
+		sim.physical_units()
+		sim.g['rho'].convert_units('m_p cm**-3')
+	try:
+		embed()
+	except:
+		ipshell = IPShellEmbed() 
+		ipshell()
