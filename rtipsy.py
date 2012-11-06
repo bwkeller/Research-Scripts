@@ -1,6 +1,6 @@
 import struct
 import numpy as np
-def rtipsy(file, VERBOSE=False):
+def rtipsy(filename, VERBOSE=False):
   """rtipsy Reads tipsy files detecting the format: 
   big endian, little endian, padded (standard) or non-padded header 
   
@@ -22,7 +22,7 @@ def rtipsy(file, VERBOSE=False):
 	plt.plot(d['x'], d['y'], 'k,')"""
   return
 	try:
-		f = open(file, 'rb')
+		f = open(filename, 'rb')
 	except:
 		print "RTIPSY ERROR: Can't open file"
 		return 1
@@ -63,9 +63,9 @@ def rtipsy(file, VERBOSE=False):
 	if (ng > 0):
 		for i in range(ng):
 			if endianswap:
-				mass, x, y, z, vx, vy, vz, dens, tempg, h, zmetal, phi = struct.unpack("<ffffffffffff", f.read(48))
-			else:
 				mass, x, y, z, vx, vy, vz, dens, tempg, h, zmetal, phi = struct.unpack(">ffffffffffff", f.read(48))
+			else:
+				mass, x, y, z, vx, vy, vz, dens, tempg, h, zmetal, phi = struct.unpack("<ffffffffffff", f.read(48))
 			catg['mass'][i] = mass
 			catg['x'][i] = x
 			catg['y'][i] = y
@@ -81,9 +81,9 @@ def rtipsy(file, VERBOSE=False):
 	if (nd > 0):
 		for i in range(nd):
 			if endianswap:
-				mass, x, y, z, vx, vy, vz, eps, phi = struct.unpack("<fffffffff", f.read(36))
-			else:
 				mass, x, y, z, vx, vy, vz, eps, phi = struct.unpack(">fffffffff", f.read(36))
+			else:
+				mass, x, y, z, vx, vy, vz, eps, phi = struct.unpack("<fffffffff", f.read(36))
 			catd['mass'][i] = mass
 			catd['x'][i] = x
 			catd['y'][i] = y
@@ -96,9 +96,9 @@ def rtipsy(file, VERBOSE=False):
 	if (ns > 0):
 		for i in range(ns):
 			if endianswap:
-				mass, x, y, z, vx, vy, vz, metals, tform, eps, phi = struct.unpack("<fffffffffff", f.read(44))
-			else:
 				mass, x, y, z, vx, vy, vz, metals, tform, eps, phi = struct.unpack(">fffffffffff", f.read(44))
+			else:
+				mass, x, y, z, vx, vy, vz, metals, tform, eps, phi = struct.unpack("<fffffffffff", f.read(44))
 			cats['mass'][i] = mass
 			cats['x'][i] = x
 			cats['y'][i] = y
