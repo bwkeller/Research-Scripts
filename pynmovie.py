@@ -5,6 +5,7 @@ import envoy
 from optparse import OptionParser
 import pynbody.analysis.angmom as angmom
 import pynbody.plot.sph as p_sph
+import pynbody as pyn
 import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
@@ -31,9 +32,10 @@ if __name__ == "__main__":
 		if opts.script != None:
 			scriptfile.process(i)
 		else:
+			sim = pyn.load(i)
 			ptypes = {"gas":sim.gas, "dm":sim.dm, "stars":sim.stars}
-			p_sph.image(ptypes[opts.ptype], cmap="jet", vmin=vmin, vmax=vmax)
-		plt.savefig("%09d.png" % (imgcount))
+			p_sph.image(ptypes[opts.ptype], units='m_p cm**-3', cmap="jet", vmin=vmin, vmax=vmax)
+		plt.savefig("%09d.png" % (imgcount), dpi=150)
 		imgcount += 1
 	vid = envoy.run('ffmpeg  -qscale 1 -r %d -i %%09d.png %s' % (int(opts.fps), fname))
 	for i in range(imgcount):
