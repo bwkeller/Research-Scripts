@@ -71,14 +71,14 @@ def scaleheight(sim, axis='z'):
 	return np.inner(sim['mass'], np.abs(sim[axis]))/np.sum(sim['mass'])
 
 def phase(sim):
-	plt.loglog(sim.g['rho'], sim.g['temp'], 'r.', ms=1, mec='r')
+	plt.loglog(sim.g['rho'], sim.g['temp'], 'r.', ms=1, mec='k')
 	plt.xlabel('Density (%s)' % str(sim.g['rho'].units))
 	plt.ylabel('Temperature (%s)' % str(sim.g['temp'].units))
 
-def point_plot_3d(sim, qty='rho'):
+def point_plot_3d(sim, qty='rho', size=2):
 	fig = plt.figure()
 	ax = fig.add_subplot(111, projection='3d')
-	ax.scatter(sim['x'], sim['y'], sim['z'], c=sim[qty], s=2, marker=',', 
+	ax.scatter(sim['x'], sim['y'], sim['z'], c=sim[qty], s=size, marker=',', 
 	edgecolor='none')
 
 @pyn.snapshot.SimSnap.derived_quantity
@@ -96,7 +96,7 @@ if __name__ == "__main__":
 		filename = args[0]+".dt"
 		sim['dt']
 	if(not opts.cunits):
-		sim.physical_units()
+		#sim.physical_units()
 		sim.g['rho'].convert_units('m_p cm**-3')
 	try:
 		embed()
