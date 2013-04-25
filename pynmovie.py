@@ -1,7 +1,6 @@
 #!/usr/bin/python2.7
 import sys
 import pynbody
-import envoy
 from optparse import OptionParser
 import pynbody.analysis.angmom as angmom
 import pynbody.plot.sph as p_sph
@@ -41,6 +40,7 @@ if __name__ == "__main__":
 		plt.savefig("%09d.png" % (imgcount), dpi=150)
 		imgcount += 1
 	if opts.video:
+		import envoy
 		vid = envoy.run('ffmpeg  -qscale 1 -r %d -i %%09d.png %s' % (int(opts.fps), opts.outname))
 		for i in range(imgcount):
 			envoy.run("rm %09d.png" % (i))
